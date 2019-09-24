@@ -1,0 +1,36 @@
+version: '3'
+services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "3050:80"
+  mongo:
+    image: 'mongo:latest'
+    restart: always
+    ports:
+      - "27018:27017"
+  api:
+    depends_on:
+      - mongo
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      - DB_CONNECTION_STRING=mongodb://mongo:27017
+      - DB_SCHEMA=mydb
+      - NODE_ENV=development
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - "4000:3001"

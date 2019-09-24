@@ -1,0 +1,7 @@
+.bg {
+  background-color: #47464f;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
